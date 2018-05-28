@@ -1,7 +1,8 @@
 'use strict';
 
-module.exports = function(Coffeeshop) {
-  Coffeeshop.status = function(cb) {
+module.exports = function (Coffeeshop) {
+  // status
+  Coffeeshop.status = function (cb) {
     var currentDate = new Date();
     var currentHour = currentDate.getHours();
     var OPEN_HOUR = 6;
@@ -16,6 +17,14 @@ module.exports = function(Coffeeshop) {
     }
     cb(null, response);
   };
+  // name
+  Coffeeshop.getName = function (shopId, cb) {
+    Coffeeshop.findById(shopId, function (err, instance) {
+      var response = 'Name of coffee shop is:' + instance.name;
+      cb(null, response);
+      console.log(response);
+    });
+  };
   Coffeeshop.remoteMethod(
     'status', {
       http: {
@@ -26,6 +35,14 @@ module.exports = function(Coffeeshop) {
         arg: 'status',
         type: 'string'
       }
+    }
+  );
+  Coffeeshop.remoteMethod(
+    'getName',
+    {
+      http: {path: '/getname', verb: 'get'},
+      accepts: {arg: 'id', type: 'number', http: {source: 'query'}},
+      returns: {arg: 'name', type: 'string'}
     }
   );
 };
