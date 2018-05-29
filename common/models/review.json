@@ -1,30 +1,33 @@
 {
-  "name": "CoffeeShop",
+  "name": "Review",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "name": {
+    "date": {
+      "type": "date"
+    },
+    "rating": {
+      "type": "number"
+    },
+    "comments": {
       "type": "string",
       "required": true
-    },
-    "city": {
-      "type": "string"
     }
   },
   "validations": [],
   "relations": {
-    "reviews": {
-      "type": "hasMany",
-      "model": "Review",
+    "coffeeShop": {
+      "type": "belongsTo",
+      "model": "CoffeeShop",
       "foreignKey": ""
     },
-    "reviewers": {
-      "type": "hasMany",
+    "reviewer": {
+      "type": "belongsTo",
       "model": "Reviewer",
-      "foreignKey": ""
+      "foreignKey": "publisherId"
     }
   },
   "acls": [
@@ -37,7 +40,20 @@
     {
       "accessType": "READ",
       "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
       "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "create"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
       "permission": "ALLOW"
     }
   ],
